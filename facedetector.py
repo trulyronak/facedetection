@@ -40,8 +40,10 @@ def scanImage(path):
     img = Image.open(path) #first we get the image to draw on
     draw = ImageDraw.Draw(img)
     faceNumber = 0
-    #os.system('mkdir scans')
-    #os.system('cd scans')
+    os.system('echo wiping old scans')
+    os.system('rm -rf scans')
+    os.system('rm scanned.jpg')
+    os.system('mkdir scans')
     for face in faces:
         vertices = face.bounds.vertices
 
@@ -54,26 +56,31 @@ def scanImage(path):
         #now we have a polygon, so we draw
         if (len(coords) == 4): #if we did indeed get a rectangle
             draw.polygon(coords, outline=(255,255,255,255))
-            name = "face_" + str(faceNumber)
-            #crop(img, coords, name)
-    img.save("scanned.jpg")
-    faceNumber += 1
-
+            name = "face_" + str(faceNumber) + ".jpg"
+            crop(img, coords, name)
+        faceNumber += 1
+    img.save("totalscan.jpg")
+    os.system('mv totalscan.jpg scans/')
 # Crops an image, assuming len(coords) == 4
 def crop(img, coords, savename):
-    print(coords)
-    x = coords[0][0]
-    y = coords[0][1]
-    width = coords[2][0] - coords[0][0]
-    height = coords[3][1] - coords[1][1]
-    print("X: " + str(x))
-    print("Y: " + str(y))
-    print("HEIGHT: " + str(height))
-    print("WIDTH: " + str(width))
-    print("")
-    img.crop((x, y, width, height))
+    #print(coords)
+    #print("IMAGE SIZE: " + str(img.size))
+    x1 = coords[0][0]
+    y1 = coords[0][1]
+    x2 = coords[2][0]
+    y2 = coords[2][1]
 
-    img.save(savename)
+    #width = (x2 - x1)
+    #height = (y2 - y1)
+    #print("X: " + str(x1))
+    #print("Y: " + str(y1))
+    #print("HEIGHT: " + str(height))
+    #print("WIDTH: " + str(width))
+    #print("")
+    newImg = img.crop((x1, y1, x2, y2))
+    
+    newImg.save(savename)
+    cmd = "mv " + savename + " scans/"
+    os.system(cmd) 
 
-
-scanImage("george.JPG")
+scanImage("brilliant.jpg")

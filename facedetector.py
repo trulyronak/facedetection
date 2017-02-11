@@ -40,8 +40,8 @@ def scanImage(path):
     img = Image.open(path) #first we get the image to draw on
     draw = ImageDraw.Draw(img)
     faceNumber = 0
-    os.system('mkdir scans')
-    os.system('cd scans')
+    #os.system('mkdir scans')
+    #os.system('cd scans')
     for face in faces:
         vertices = face.bounds.vertices
 
@@ -55,8 +55,8 @@ def scanImage(path):
         if (len(coords) == 4): #if we did indeed get a rectangle
             draw.polygon(coords, outline=(255,255,255,255))
             name = "face_" + str(faceNumber)
-            crop(img, coords, name)
-    img.save("scanned")
+            #crop(img, coords, name)
+    img.save("scanned.jpg")
     faceNumber += 1
 
 # Crops an image, assuming len(coords) == 4
